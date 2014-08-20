@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <title>My OSX-Remote Server</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/cosmo/bootstrap.min.css" rel="stylesheet">
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      	<h1><%= server.name %></h1>
+      	<p id="computer">
+		  	Mac :
+	 	 	<button>reboot</button>
+	  	</p>
+		<p id="apps">
+			Launch :
+			<button id="plex" data-app="Plex Home Theater">Plex Home Theater</button>
+	  	<p>
+     	 	<input type="text"> <button>AppleScript</button>
+	 	</p>
+		<p>
+			Shortcuts : 
+			<a href="http://<%= server.hostname %>:9091/web/transmission" >Transmission</a>
+			<a href="http://<%= server.hostname %>:32400/web/">Plex Media Server</a>
+		</p>
+    </div>
+
+   <script src="https://code.jquery.com/jquery-2.1.1.js">
+   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+   <script src="/socket.io/socket.io.js"></script>
+   <script>
+	   var socket = io.connect('http://'+window.location.hostname+':<%= server.name %>');
+	   
+	   socket.emit('message', 'Salut serveur, ça va ?');
+	   
+	   $('#plex').click(function () {
+		   console.log('ploex');
+	       socket.emit('message', 'Salut serveur, ça va ?');
+	   })
+	   
+	   </script>
+  </body>
+</html>
