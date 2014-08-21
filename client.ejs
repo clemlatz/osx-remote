@@ -15,24 +15,22 @@
 	      			<input type="password" placeholder="Enter password..." autofocus> <button>Connect</button>
 	      		</form>
 	      	</div>
-	      	
-	    	<div id="home" class="container" style="display: none;">
-		  		<p id="computer">
-			  		Mac :
-		  		<button>reboot</button>
-		  		</p>
-		  		<p id="apps">
-		  			Launch :
-		  			<button id="plex" data-app="Plex Home Theater">Plex Home Theater</button>
-		  		<p>
-		  			<input type="text"> <button>AppleScript</button>
-		  			</p>
-		  		<p>
-			  		Shortcuts : 
-			  		<a href="http://<%= config.server.hostname %>:9091/web/transmission" >Transmission</a>
-			  		<a href="http://<%= config.server.hostname %>:32400/web/">Plex Media Server</a>
-		  		</p>
-			 </div>
+
+			<div id="home" class="container" style="display: none;">
+				<% if (config.modules.say.active) { %>
+					<form id="say" class="container">
+						<input type="text">
+						<button>Say</button>
+					</form>
+				<% } %>
+				<div class="container">
+					<p>Shortcuts :</p> 
+					<ul>
+						<li><a href="http://<%= config.server.hostname %>:9091/web/transmission" >Transmission</a></li>
+						<li><a href="http://<%= config.server.hostname %>:32400/web/">Plex Media Server</a></li>
+					</ul>
+				</p>
+			</div>
 		</div>
 	
 		<script src="https://code.jquery.com/jquery-2.1.1.js">
@@ -52,6 +50,12 @@
 				$('#login').fadeOut('fast', function() {
 					$('#home').fadeIn();
 				});
+			});
+			
+			// Server commands
+			$('#say').submit( function(e) {
+				e.preventDefault();
+				socket.emit('say', $('#say input').val());
 			});
 			
 			// Server alert

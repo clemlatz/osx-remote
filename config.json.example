@@ -3,5 +3,10 @@
 		"name": "My OSX-Remote Server",
 		"port": 8080,
 		"password": ""
+	},
+	"modules": {
+		"say": {
+			"active": true
+		}
 	}
 }

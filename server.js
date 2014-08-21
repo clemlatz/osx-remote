@@ -34,18 +34,33 @@ app.get('/', function(req, res){
 // Socket server
 io.on('connection', function(socket){
 	console.log('a user connected');
+	socket.auth = false;
 	
 	// On user login
 	socket.on('login', function(password){
     	if (password == config.server.password)
     	{
-	    	socket.emit('connected', 'xxx');
+	    	socket.emit('connected', true);
+	    	socket.auth = true;
     	}
     	else
     	{
     		console.log('login failed with password: '+password);
 	    	socket.emit('alert', 'Wrong password !');
     	}
+	});
+	
+	socket.on('say', function(msg) {
+		if (!socket.auth) socket.emit('alert', 'Authentification error, reload the page.');
+		else if (!config.modules.say.active) socket.emit('alert', 'Say module is not active.');
+		else
+		{
+			console.log('User making me say: '+msg);
+			var script = 'say "'+msg+'"';
+			applescript.execString(script, function(err, rtn) {
+				if (err) socket.emit('alert', err);
+			});
+		}
 	});
 	
 	// User disconnect
