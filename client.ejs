@@ -1,37 +1,64 @@
 <!doctype html>
 <html>
 	<head>
+		<meta charset="utf8">
     	<title>My OSX-Remote Server</title>
 		<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/cosmo/bootstrap.min.css" rel="stylesheet">
-		<style>
-      
-		</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	</head>
 	<body>
-    	<div class="container">
-      		<h1><%= server.name %></h1>
-	  		<p id="computer">
-		  		Mac :
-	  		<button>reboot</button>
-	  		</p>
-	  		<p id="apps">
-	  			Launch :
-	  			<button id="plex" data-app="Plex Home Theater">Plex Home Theater</button>
-	  		<p>
-	  			<input type="text"> <button>AppleScript</button>
-	  			</p>
-	  		<p>
-		  		Shortcuts : 
-		  		<a href="http://<%= server.hostname %>:9091/web/transmission" >Transmission</a>
-		  		<a href="http://<%= server.hostname %>:32400/web/">Plex Media Server</a>
-	  		</p>
-		 </div>
-
-	   <script src="https://code.jquery.com/jquery-2.1.1.js">
-	   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	   <script src="/socket.io/socket.io.js"></script>
-	   <script>
-		   
-	   </script>
+		<div id="page" class="container">
+			<h1><%= config.server.name %></h1>
+	      	
+	      	<div id="login" class="container">
+	      		<form>
+	      			<input type="password" placeholder="Enter password..." autofocus> <button>Connect</button>
+	      		</form>
+	      	</div>
+	      	
+	    	<div id="home" class="container" style="display: none;">
+		  		<p id="computer">
+			  		Mac :
+		  		<button>reboot</button>
+		  		</p>
+		  		<p id="apps">
+		  			Launch :
+		  			<button id="plex" data-app="Plex Home Theater">Plex Home Theater</button>
+		  		<p>
+		  			<input type="text"> <button>AppleScript</button>
+		  			</p>
+		  		<p>
+			  		Shortcuts : 
+			  		<a href="http://<%= config.server.hostname %>:9091/web/transmission" >Transmission</a>
+			  		<a href="http://<%= config.server.hostname %>:32400/web/">Plex Media Server</a>
+		  		</p>
+			 </div>
+		</div>
+	
+		<script src="https://code.jquery.com/jquery-2.1.1.js">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io();
+			
+			// Login using form
+			$('#login form').submit( function(e) {
+				e.preventDefault();
+				socket.emit('login', $('#login input').val());
+			});
+			
+			// Login successful
+			socket.on('connected', function(){
+				$('#login').fadeOut('fast', function() {
+					$('#home').fadeIn();
+				});
+			});
+			
+			// Server alert
+			socket.on('alert', function(err){
+				alert(err);
+			});
+			
+		</script>
 	</body>
 </html>
