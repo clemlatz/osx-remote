@@ -14,4 +14,4 @@ Installation
 6. Edit config file and set password `nano config.json`
 7. Start server `node server.js`
 
-You can now control your mac @ [http://localhost:8080/](http://localhost:8080/) !
+You can manage your time & tasks @ [http://localhost:8080/](http://localhost:8080/) !
