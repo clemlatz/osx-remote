@@ -7,6 +7,15 @@
 	"modules": {
 		"say": {
 			"active": true
+		},
+		"launcher": {
+			"active": true,
+			"apps":[
+				{
+					"name": "Browser",
+					"app": "Safari"
+				}
+			]
 		}
 	}
 }

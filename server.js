@@ -50,6 +50,7 @@ io.on('connection', function(socket){
     	}
 	});
 	
+	// Say something
 	socket.on('say', function(msg) {
 		if (!socket.auth) socket.emit('alert', 'Authentification error, reload the page.');
 		else if (!config.modules.say.active) socket.emit('alert', 'Say module is not active.');
@@ -57,6 +58,21 @@ io.on('connection', function(socket){
 		{
 			console.log('User making me say: '+msg);
 			var script = 'say "'+msg+'"';
+			applescript.execString(script, function(err, rtn) {
+				if (err) socket.emit('alert', err);
+			});
+		}
+	});
+	
+	// Launch app
+	socket.on('launch', function(launch) {
+		if (!socket.auth) socket.emit('alert', 'Authentification error, reload the page.');
+		else if (!config.modules.launcher.active) socket.emit('alert', 'Launcher module is not active.');
+		else
+		{
+			console.log('User launching an app: '+launch);
+			
+			var script = 'tell application "'+launch+'" to launch';
 			applescript.execString(script, function(err, rtn) {
 				if (err) socket.emit('alert', err);
 			});
