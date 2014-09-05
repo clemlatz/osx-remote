@@ -74,7 +74,13 @@ io.on('connection', function(socket){
 			
 			var script = 'tell application "'+launch+'" to launch';
 			applescript.execString(script, function(err, rtn) {
-				if (err) socket.emit('alert', err);
+				if (err)
+				{
+					err.forEach( function(msg) {
+						console.log('Error:'+msg);
+						socket.emit('alert', err);
+					});
+				}
 			});
 		}
 	});
